@@ -3,7 +3,8 @@
 **One dashboard, one checklist, one new-hire form for every hire type.**
 Built with **Power Apps · SharePoint Lists · Power Automate**. Live and in pilot use.
 
-> Portfolio demo with fictional data. Open `index.html` in any browser.
+### 👉 [Try the live demo](https://sylim-analytics.github.io/onboarding-command-center/)
+> Interactive mockup with fictional data. No sign-in needed.
 
 ## The Problem
 Onboarding lived in 6 places: notice emails, a separate Microsoft Form, Planner (capped at 20 tasks), OneNote checklists, bookmarked sites, and confirmation emails. Four hire types (employee, contractor, intern, transfer) needed different steps, and no one could see overall progress.
