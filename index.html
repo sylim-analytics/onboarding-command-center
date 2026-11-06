@@ -2,116 +2,154 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Onboarding Command Center — Workspace Preview (MOCKUP, not live data)</title>
+<title>Onboarding Command Center — Portfolio Demo (sample data only)</title>
 <style>
   :root{
-    --navy:#1F3864; --teal:#0E7C7B; --lteal:#DCEEEE; --lblue:#EAF1F8;
-    --green:#C6EFCE; --red:#FFC7CE; --yellow:#FFEB9C; --grey:#F2F2F2; --border:#B7C6D9;
+    --navy:#20335c; --navy2:#16284a; --teal:#1f8a8a; --tealdark:#176e6e;
+    --lteal:#e3f3f3; --lblue:#eef3fa; --green:#dff5df; --greentxt:#1e7a1e;
+    --yellow:#fff3cd; --yellowtxt:#8a6d00; --red:#fbe1e3; --redtxt:#a32f3a;
+    --border:#d7dee8; --grey:#f4f5f7; --combo:#f3f4f6;
   }
   *{box-sizing:border-box;}
   body{font-family:"Segoe UI",Calibri,Arial,sans-serif;margin:0;background:#f3f4f6;color:#222;}
-  .mockup-banner{background:#7a1f1f;color:#fff;text-align:center;padding:6px;font-size:13px;font-weight:600;letter-spacing:.3px;}
-  header{background:var(--navy);color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
-  header h1{margin:0;font-size:20px;}
-  nav{display:flex;gap:4px;background:var(--teal);padding:0 20px;}
-  nav button{background:transparent;border:none;color:#fff;padding:12px 18px;font-size:14px;cursor:pointer;border-bottom:3px solid transparent;}
-  nav button.active{border-bottom:3px solid #fff;font-weight:700;background:rgba(255,255,255,.12);}
-  main{padding:20px 24px;max-width:1400px;margin:0 auto;}
+  .mockup-banner{background:#1b5e4a;color:#fff;text-align:center;padding:6px;font-size:12.5px;font-weight:600;letter-spacing:.2px;}
+  header{background:var(--navy);color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  header .brand{display:flex;align-items:center;gap:10px;}
+  header .brand .icon{width:30px;height:30px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;}
+  header h1{margin:0;font-size:19px;font-weight:700;}
+  header .viewing{font-size:12.5px;color:#cfe0ef;}
+  nav{display:flex;background:var(--teal);padding:0 20px;flex-wrap:wrap;}
+  nav button{background:transparent;border:none;color:#fff;padding:12px 18px;font-size:13.5px;cursor:pointer;border-bottom:3px solid transparent;}
+  nav button.active{background:var(--tealdark);font-weight:700;border-bottom:3px solid #fff;}
+  main{padding:20px 24px;max-width:1500px;margin:0 auto;}
   .view{display:none;}
   .view.active{display:block;}
-  .cards{display:flex;gap:14px;margin-bottom:20px;flex-wrap:wrap;}
-  .card{background:var(--lteal);border:1px solid var(--border);border-radius:8px;padding:14px 18px;min-width:170px;text-align:center;}
-  .card .label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;}
+
+  .toolbar{display:flex;gap:16px;align-items:center;margin-bottom:18px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 16px;}
+  .toolbar label{font-size:12.5px;font-weight:700;color:var(--navy);}
+  .combo{appearance:none;-webkit-appearance:none;background:var(--combo) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6"><path d="M0 0l5 6 5-6z" fill="%23667"/></svg>') no-repeat right 10px center;border:1px solid var(--border);border-radius:5px;padding:7px 28px 7px 10px;font-size:13px;color:#333;min-width:160px;}
+  .toggle{position:relative;width:40px;height:20px;background:#ccc;border-radius:10px;cursor:pointer;display:inline-block;transition:background .15s;}
+  .toggle.on{background:var(--teal);}
+  .toggle .knob{position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .15s;}
+  .toggle.on .knob{left:22px;}
+
+  .cards{display:flex;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
+  .card{background:var(--lteal);border:1px solid var(--border);border-radius:8px;padding:14px 20px;min-width:160px;text-align:center;flex:1;}
+  .card .label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;}
   .card .value{font-size:28px;font-weight:800;color:var(--teal);margin-top:4px;}
-  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);}
-  th{background:var(--teal);color:#fff;font-size:12px;padding:8px;text-align:left;position:sticky;top:0;}
-  td{padding:7px 8px;border-bottom:1px solid #eee;font-size:13px;vertical-align:middle;}
+
+  h2.sectitle{color:var(--navy);font-size:17px;margin:0 0 12px;}
+
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  th{background:var(--teal);color:#fff;font-size:11.5px;padding:9px 10px;text-align:left;font-weight:700;}
+  td{padding:9px 10px;border-bottom:1px solid #eee;font-size:13px;vertical-align:middle;}
   tr:hover td{background:#f8fbfd;}
-  .pill{display:inline-block;padding:3px 9px;border-radius:12px;font-size:11px;font-weight:700;}
-  .pill.notstarted{background:var(--red);color:#7a1f1f;}
-  .pill.inprogress{background:var(--yellow);color:#7a5c00;}
-  .pill.completed{background:var(--green);color:#2e6b2e;}
-  .bar-outer{background:#e4e4e4;border-radius:6px;height:10px;width:120px;overflow:hidden;display:inline-block;vertical-align:middle;}
+  a.namelink{color:#0563C1;text-decoration:underline;font-weight:600;}
+  .pill{display:inline-block;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;}
+  .pill.notstarted{background:var(--red);color:var(--redtxt);}
+  .pill.inprogress{background:var(--yellow);color:var(--yellowtxt);}
+  .pill.completed{background:var(--green);color:var(--greentxt);}
+  .bar-outer{background:#e4e4e4;border-radius:6px;height:9px;width:110px;overflow:hidden;display:inline-block;vertical-align:middle;}
   .bar-inner{background:var(--teal);height:100%;}
-  .openbtn{background:var(--navy);color:#fff;border:none;padding:5px 12px;border-radius:5px;font-size:12px;cursor:pointer;}
+  .openbtn{background:var(--navy);color:#fff;border:none;padding:6px 14px;border-radius:5px;font-size:12px;cursor:pointer;}
   .openbtn:hover{background:var(--teal);}
-  select, input[type=text]{padding:6px 8px;border:1px solid var(--border);border-radius:5px;font-size:13px;}
-  .toolbar{display:flex;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
-  .toolbar label{font-size:12px;font-weight:700;color:var(--navy);}
-  h2.sectitle{color:var(--navy);border-left:5px solid var(--teal);padding-left:10px;margin:26px 0 10px;}
-  .back{background:none;border:1px solid var(--navy);color:var(--navy);padding:5px 12px;border-radius:5px;cursor:pointer;font-size:12px;margin-bottom:14px;}
+  .trashbtn{background:none;border:none;color:#b23b3b;cursor:pointer;font-size:15px;}
+  .add-row-btn{background:var(--teal);color:#fff;border:none;padding:9px 16px;border-radius:5px;cursor:pointer;font-size:13px;font-weight:700;margin-bottom:14px;}
+  .add-row-btn:hover{background:var(--tealdark);}
+
+  /* Modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(20,30,45,.45);align-items:center;justify-content:center;z-index:50;}
+  .modal-overlay.active{display:flex;}
+  .modal-box{background:#fff;border-radius:10px;width:620px;max-width:94vw;max-height:88vh;overflow-y:auto;padding:22px 26px;box-shadow:0 10px 40px rgba(0,0,0,.25);}
+  .modal-box h3{margin:0 0 16px;color:var(--navy);font-size:18px;}
+  .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;}
+  .mfield label{display:block;font-size:12.5px;font-weight:600;color:#333;margin-bottom:5px;}
+  .mfield label.req:after{content:" *";color:#b23b3b;}
+  .mfield input,.mfield select{width:100%;}
+  .modal-actions{margin-top:22px;display:flex;gap:10px;justify-content:flex-end;}
+  .btn-save{background:var(--teal);color:#fff;border:none;padding:9px 22px;border-radius:5px;font-size:13.5px;font-weight:700;cursor:pointer;}
+  .btn-save:hover{background:var(--tealdark);}
+  .btn-cancel{background:none;border:none;color:#333;padding:9px 14px;font-size:13.5px;cursor:pointer;text-decoration:underline;}
+  .modal-error{background:var(--red);color:var(--redtxt);border-radius:6px;padding:8px 12px;font-size:12px;margin-bottom:12px;display:none;}
+
+  /* Hire checklist layout */
+  .back{background:none;border:1px solid var(--navy);color:var(--navy);padding:6px 14px;border-radius:5px;cursor:pointer;font-size:12.5px;margin-bottom:14px;}
   .back:hover{background:var(--navy);color:#fff;}
-  .phase-head{background:#e9eef5;font-weight:700;color:var(--navy);font-size:12px;padding:6px 10px;border-left:4px solid var(--navy);margin-top:14px;}
-  .phase-head.admin{border-left-color:#548235;}
-  .task-row{display:grid;grid-template-columns:28px 1fr 110px 140px;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid #eee;}
-  .task-row:hover{background:#f8fbfd;}
-  .task-row a{color:#0563C1;text-decoration:underline;font-size:13px;}
-  .headrow{display:grid;grid-template-columns:28px 1fr 110px 140px;gap:8px;padding:6px 10px;background:var(--teal);color:#fff;font-size:11px;font-weight:700;}
-  .hire-meta{display:flex;gap:28px;background:var(--lblue);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px;flex-wrap:wrap;}
-  .hire-meta div span.k{display:block;font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;}
+  .hire-meta{display:flex;gap:28px;background:var(--lblue);border:1px solid var(--border);border-radius:8px;padding:14px 20px;margin-bottom:16px;flex-wrap:wrap;}
+  .hire-meta div span.k{display:block;font-size:10.5px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.3px;}
   .hire-meta div span.v{font-size:14px;}
-  .timeline{position:relative;height:90px;margin:30px 10px 50px;}
-  .timeline .line{position:absolute;top:40px;left:0;right:0;height:4px;background:var(--border);border-radius:2px;}
-  .tl-point{position:absolute;top:28px;width:26px;height:26px;border-radius:50%;background:var(--teal);border:3px solid #fff;box-shadow:0 0 0 2px var(--teal);cursor:pointer;}
-  .tl-point.done{background:var(--navy);box-shadow:0 0 0 2px var(--navy);}
-  .tl-label{position:absolute;top:60px;font-size:11px;width:160px;text-align:center;transform:translateX(-50%);color:#333;}
-  .tl-date{position:absolute;top:0;font-size:11px;width:160px;text-align:center;transform:translateX(-50%);color:var(--navy);font-weight:700;}
-  .email-preview{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-top:10px;}
-  .email-preview .subj{font-weight:700;color:var(--navy);margin-bottom:4px;}
-  .email-preview .meta{font-size:11px;color:#888;margin-bottom:10px;}
-  .note{background:#fff8e1;border:1px solid #e0c36a;border-radius:6px;padding:10px 14px;font-size:12.5px;margin-top:10px;}
-  .add-row-btn{background:var(--teal);color:#fff;border:none;padding:7px 14px;border-radius:5px;cursor:pointer;font-size:13px;}
-  .matrix-table td, .matrix-table th{text-align:center;}
-  .matrix-table td.yes{background:var(--green);font-weight:700;}
-  .matrix-table td.no{background:var(--grey);color:#999;}
-  .matrix-table td.optional{background:var(--yellow);color:#7a5c00;font-weight:700;}
-  .memo-box{background:#eef6ff;border:1px dashed var(--border);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--navy);margin:8px 0;}
-  .task-row.task-optional{opacity:.6;}
-  .badge-optional{display:inline-block;background:var(--grey);color:#777;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:6px;}
-  .badge-mail{display:inline-block;background:#e8f0fe;color:#1a56c4;font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:6px;}
-  .form-response-box{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:16px;}
-  .form-response-head{font-weight:700;color:var(--navy);margin-bottom:4px;font-size:13px;}
-  .form-response-sub{font-size:11px;color:#888;margin-bottom:12px;}
-  .form-response-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 16px;}
-  .form-field label{display:block;font-size:11px;color:#555;margin-bottom:3px;}
-  .form-field select,.form-field input{width:100%;box-sizing:border-box;}
-  .compare-table th{min-width:140px;}
-  .compare-table td input,.compare-table td select{width:100%;box-sizing:border-box;font-size:12px;padding:4px;}
-  .compare-table td.fieldlabel{text-align:left;font-weight:700;color:var(--navy);background:#f7f9fb;white-space:nowrap;}
+  .checklist-layout{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start;}
+  .checklist-col{background:#fff;border:1px solid var(--border);border-radius:8px;padding:16px 18px;}
+  .checklist-col h3{margin:0 0 8px;color:var(--navy);font-size:15px;}
+  .progress-sub{font-size:12px;color:#777;margin-bottom:14px;}
+  .phase-head{background:#e9eef5;font-weight:700;color:var(--navy);font-size:11.5px;padding:7px 10px;border-left:4px solid var(--navy);margin-top:12px;text-transform:uppercase;letter-spacing:.3px;}
+  .phase-head.admin{border-left-color:#548235;}
+  .headrow{display:grid;grid-template-columns:26px 1fr 100px 150px;gap:8px;padding:6px 10px;background:var(--teal);color:#fff;font-size:10.5px;font-weight:700;margin-top:4px;}
+  .task-row{display:grid;grid-template-columns:26px 1fr 100px 150px;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid #eee;}
+  .task-row:hover{background:#f8fbfd;}
+  .task-row a{color:#0563C1;text-decoration:underline;font-size:12.5px;}
+  .task-row.task-optional{opacity:.55;}
+  .badge-optional{display:inline-block;background:var(--grey);color:#888;font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:5px;}
+  .task-row input[type=text]{width:100%;font-size:12px;padding:4px 6px;}
+
+  /* side panel - New Hire Form (read-only reflection) */
+  .nhf-panel h3{margin:0 0 4px;color:var(--navy);font-size:15px;}
+  .nhf-panel .status{font-size:12px;color:#999;margin-bottom:12px;}
+  .nhf-panel .status.submitted{color:var(--greentxt);font-weight:700;}
+  .nhf-field{margin-bottom:12px;}
+  .nhf-field label{display:block;font-size:11.5px;font-weight:700;color:#444;margin-bottom:4px;}
+  .nhf-field label.req:after{content:" *";color:#b23b3b;}
+  .nhf-field .val{font-size:13px;color:#222;background:var(--grey);border:1px solid var(--border);border-radius:5px;padding:7px 9px;min-height:16px;}
+  .nhf-field select, .nhf-field input{width:100%;}
+
+  /* Task matrix */
+  .matrix-note{background:#fff8e1;border:1px solid #e0c36a;border-radius:6px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;}
+  .matrix-table th, .matrix-table td{text-align:center;}
+  .matrix-table td.phase-task{text-align:left;}
+  .matrix-table td.phase-task .task-name{font-weight:600;color:#222;}
+  .matrix-table td.phase-task .phase-tag{display:block;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.3px;margin-top:2px;}
+  .rule-select{appearance:none;-webkit-appearance:none;border:none;border-radius:12px;font-size:11px;font-weight:700;padding:5px 22px 5px 10px;cursor:pointer;background-repeat:no-repeat;background-position:right 8px center;background-size:8px;}
+  .rule-select.yes{background-color:var(--green);color:var(--greentxt);background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="5"><path d="M0 0l4 5 4-5z" fill="%231e7a1e"/></svg>');}
+  .rule-select.no{background-color:var(--grey);color:#999;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="5"><path d="M0 0l4 5 4-5z" fill="%23999"/></svg>');}
+  .rule-select.optional{background-color:var(--yellow);color:var(--yellowtxt);background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="8" height="5"><path d="M0 0l4 5 4-5z" fill="%238a6d00"/></svg>');}
+  .matrix-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:#555;flex-wrap:wrap;}
+  .matrix-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .legend-dot{width:12px;height:12px;border-radius:3px;display:inline-block;}
+
   footer{text-align:center;padding:20px;color:#999;font-size:12px;}
 </style>
 </head>
 <body>
-
-<div class="mockup-banner">⚠ CLICKABLE MOCKUP — no real data, nothing is saved to a shared workspace. For review only.</div>
-
+<div class="mockup-banner">✅ PORTFOLIO DEMO — fictional sample data only, nothing is sent to a real system. Rebuilt to mirror a production app I built in Power Apps + SharePoint + Power Automate for new-hire onboarding.</div>
 <header>
-  <h1>🧭 Onboarding Command Center</h1>
-  <div style="font-size:12px;">Preview build · <span id="viewAsLabel">Viewing as: Admin (all hires)</span></div>
+  <div class="brand">
+    <div class="icon">🧭</div>
+    <h1>Onboarding Command Center</h1>
+  </div>
+  <div class="viewing" id="viewingLabel">Viewing as: Admin (all hires)</div>
 </header>
-
 <nav>
   <button class="navbtn active" data-view="dashboard">Dashboard</button>
   <button class="navbtn" data-view="intake">Intake Log</button>
   <button class="navbtn" data-view="checklist">Hire Checklist</button>
-  <button class="navbtn" data-view="formcompare">Form Responses (Compare)</button>
-  <button class="navbtn" data-view="notify">Notification Timeline</button>
-  <button class="navbtn" data-view="matrix">Task Matrix (Admin config)</button>
+  <button class="navbtn" data-view="matrix">Task Matrix</button>
 </nav>
-
 <main>
 
   <!-- DASHBOARD -->
   <section class="view active" id="view-dashboard">
     <div class="toolbar">
-      <label>View as:</label>
-      <select id="roleSelect"></select>
-      <span class="note" style="margin:0;">Preview the dashboard from a supervisor's view.</span>
+      <label>Viewing as:</label>
+      <select class="combo" id="roleSelect"></select>
+      <span style="display:flex;align-items:center;gap:8px;margin-left:10px;">
+        <span class="toggle" id="showCompletedToggle" onclick="toggleShowCompleted()"><span class="knob"></span></span>
+        <span style="font-size:12.5px;color:#555;">Show completed hires</span>
+      </span>
     </div>
     <div class="cards" id="kpiCards"></div>
     <h2 class="sectitle">Active Hires — Live Progress</h2>
     <table id="dashTable">
-      <thead><tr><th>Name</th><th>Type</th><th>Supervisor</th><th>Admin</th><th>Start Date</th><th>Status</th><th>% Complete</th><th></th></tr></thead>
+      <thead><tr><th>Name</th><th>Type</th><th>Supervisor</th><th>Location</th><th>Start Date</th><th>Status</th><th>% Complete</th><th></th></tr></thead>
       <tbody></tbody>
     </table>
   </section>
@@ -119,249 +157,160 @@
   <!-- INTAKE LOG -->
   <section class="view" id="view-intake">
     <h2 class="sectitle">New Hire Intake Log</h2>
-    <div class="note">Logs each new hire from the incoming email and assigns a checklist type.</div>
-    <div class="toolbar" style="margin-top:14px;">
-      <button class="add-row-btn" onclick="addMockIntakeRow()">+ Add new hire (mock)</button>
-    </div>
+    <button class="add-row-btn" onclick="openAddHireModal()">+ Add new hire</button>
     <table id="intakeTable">
       <thead><tr>
-        <th>Date Logged</th><th>Hiring Manager</th><th>Location</th><th>New Hire</th>
-        <th>Internal/External</th><th>Type (pick)</th><th>Dept # (pick)</th><th>Start Date</th><th>Admin Assigned</th><th>Open Checklist</th>
+        <th>New Hire</th><th>Employee ID</th><th>Type</th><th>Start Date</th><th>Supervisor</th>
+        <th>Dept #</th><th>Location</th><th>Internal/External</th><th>Date Logged</th><th>Open Checklist</th><th></th>
       </tr></thead>
       <tbody></tbody>
     </table>
   </section>
 
-  <!-- CHECKLIST -->
+  <!-- HIRE CHECKLIST -->
   <section class="view" id="view-checklist">
     <button class="back" onclick="showView('dashboard')">← Back to Dashboard</button>
-    <div id="checklistPicker" class="toolbar">
-      <label>Select a hire:</label>
-      <select id="hirePicker"></select>
-    </div>
     <div id="hireMetaBox"></div>
-    <div id="formResponseBox"></div>
-    <div id="taskArea"></div>
-  </section>
-
-  <!-- FORM RESPONSES COMPARE -->
-  <section class="view" id="view-formcompare">
-    <h2 class="sectitle">Intake Form Responses — All Hires (Compare)</h2>
-    <div class="note">Compare form responses by hire type; edits sync with each hire's checklist.</div>
-    <div class="toolbar">
-      <label>Compare Type:</label>
-      <select id="compareTypeSelect"></select>
+    <div class="checklist-layout">
+      <div class="checklist-col" id="checklistColBox"></div>
+      <div class="checklist-col nhf-panel" id="nhfPanelBox"></div>
     </div>
-    <div id="compareTableArea"></div>
-  </section>
-
-  <!-- NOTIFICATION TIMELINE -->
-  <section class="view" id="view-notify">
-    <h2 class="sectitle">Notification Timeline (Power Automate — proposed)</h2>
-    <div class="toolbar">
-      <label>Preview for:</label>
-      <select id="notifyHirePicker"></select>
-      <label>Recipient:</label>
-      <select id="notifyRecipient">
-        <option value="supervisor">Supervisor</option>
-        <option value="admin">Admin</option>
-      </select>
-    </div>
-    <div class="timeline" id="timelineBox"></div>
-    <div id="emailPreviewBox"></div>
-    <div class="note">Preview notifications for hire logging, five days before start, start day, and seven days after.</div>
   </section>
 
   <!-- TASK MATRIX -->
   <section class="view" id="view-matrix">
-    <h2 class="sectitle">Master Task List &amp; Applicability (single source of truth)</h2>
-    <div class="note">Tasks are generated from this master list based on each hire's type.</div>
+    <h2 class="sectitle">Master Task List &amp; Applicability (rule engine)</h2>
+    <div class="matrix-note">
+      This is the single source of truth driving everything else in the app. Each hire's checklist on the <b>Hire Checklist</b> tab is generated automatically by filtering this list down to the rows that apply to their hire type — change a rule here and it updates every future hire's checklist.
+    </div>
     <table class="matrix-table" id="matrixTable">
-      <thead><tr><th style="text-align:left;">Phase</th><th style="text-align:left;">Task</th><th>Employee</th><th>Intern</th><th>Internal Transfer</th><th>Contractor</th></tr></thead>
+      <thead><tr><th style="text-align:left;">Task</th><th>Employee</th><th>Intern</th><th>Internal Transfer</th><th>Contractor</th></tr></thead>
       <tbody></tbody>
     </table>
+    <div class="matrix-legend">
+      <span><span class="legend-dot" style="background:var(--green)"></span> Required</span>
+      <span><span class="legend-dot" style="background:var(--yellow)"></span> Optional (e.g. waived for remote hires)</span>
+      <span><span class="legend-dot" style="background:var(--grey)"></span> Not applicable</span>
+    </div>
   </section>
 
 </main>
-<footer>Mockup only — built to preview design before creating anything in a real shared workspace. Nothing here is connected to email, workflow automation, or a live list.</footer>
+<footer>Portfolio demo — fictional names and data only. Built with HTML, CSS, and vanilla JavaScript to showcase the design and logic behind a production Power Apps / SharePoint / Power Automate solution.</footer>
+
+<!-- MODAL: Add New Hire -->
+<div class="modal-overlay" id="addHireModal">
+  <div class="modal-box">
+    <h3>Add New Hire</h3>
+    <div class="modal-error" id="modalError"></div>
+    <div class="modal-grid">
+      <div class="mfield"><label class="req">New Hire</label><input type="text" id="m_name" placeholder="Full name"></div>
+      <div class="mfield"><label class="req">Hire Type</label>
+        <select id="m_type" class="combo">
+          <option value="">Find items</option>
+          <option>Employee</option><option>Intern</option><option>Internal Transfer</option><option>Contractor</option>
+        </select>
+      </div>
+      <div class="mfield"><label class="req">Employee ID</label><input type="text" id="m_empid" placeholder="e.g. 7-digit ID"></div>
+      <div class="mfield"><label class="req">Start Date</label><input type="date" id="m_start"></div>
+      <div class="mfield"><label class="req">Supervisor</label>
+        <select id="m_supervisor" class="combo"><option value="">Find items</option></select>
+      </div>
+      <div class="mfield"><label>Dept #</label>
+        <select id="m_dept" class="combo"><option value="">Find items</option></select>
+      </div>
+      <div class="mfield"><label>Location</label>
+        <select id="m_location" class="combo"><option value="">Find items</option></select>
+      </div>
+      <div class="mfield"><label>Internal or External</label>
+        <select id="m_ie" class="combo">
+          <option value="">Find items</option>
+          <option>Internal</option><option>External</option>
+        </select>
+      </div>
+      <div class="mfield"><label>Date Logged</label><input type="date" id="m_logged"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddHireModal()">Cancel</button>
+      <button class="btn-save" onclick="saveNewHire()">Save</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // ============ MOCK DATA ============
-const SUPERVISORS = ["Supervisor A","Supervisor B","Supervisor C","Supervisor D","Supervisor E","Supervisor F"];
+const SUPERVISORS = ["Mark Jones","Priya Anand","Derek Holt","Nadia Brooks","Owen Castillo","Lena Whitfield"];
 const TYPES = ["Employee","Intern","Internal Transfer","Contractor"];
-
-// ============ ORG REFERENCE DATA (added per request — lives here so nobody has to look it up) ============
-const ORG_BU = "90001";
-const ORG_OU = "4477";
-
-// Flat list of Dept # options for the Dept # dropdown (editable per hire, and at intake).
-const DEPT_OPTIONS = [
-  {dept:"10101", department:"Product Design Group (PDG)"},
-  {dept:"10220", department:"Systems Engineering & Planning (SEP)"},
-  {dept:"10340", department:"Advanced Fabrication Systems (AFS)"},
-  {dept:"10450", department:"Precision Automation Design (PAD)"},
-  {dept:"10560", department:"Automation Solutions (NC)"},
-  {dept:"10670", department:"Technical Services (TS)"},
-  {dept:"10990", department:"Contractor"},
+const DEPTS = [
+  {code:"31010", name:"Product Engineering (PE)"},
+  {code:"31020", name:"Systems Design (SD)"},
+  {code:"31030", name:"Automation Technology (AT)"},
+  {code:"31040", name:"Technical Services (TS)"},
+  {code:"31090", name:"Contractor"},
 ];
-
-// ============ INTAKE FORM RESPONSE FIELDS (new) ============
-const EMPLOYEE_FIELDS = [
-  {key:"fullName", label:"Full Name", type:"text"},
-  {key:"employeeId", label:"Employee ID Number", type:"text"},
-  {key:"supervisorName", label:"Supervisor Name", type:"text"},
-  {key:"officeLocation", label:"Office / Site Location", type:"text"},
-  {key:"employmentCategory", label:"Employment Category", type:"select", options:["Full-Time","Part-Time","Seasonal"]},
-  {key:"workArrangement", label:"Work Arrangement", type:"select", options:["On-site","Hybrid","Remote"]},
-  {key:"computerType", label:"Preferred Computer Type", type:"select", options:["Desktop","Standard Laptop","Performance Laptop"]},
-  {key:"laptopBag", label:"Laptop Bag Needed?", type:"select", options:["Yes","No"]},
-  {key:"monitorsNeeded", label:"Number of Monitors Needed", type:"select", options:["1","2"]},
-  {key:"cellPhoneNeeded", label:"Company Cell Phone Needed?", type:"select", options:["Yes","No"]},
-  {key:"specialSoftware", label:"Specialized Software Needed", type:"text"},
-  {key:"facilityAccessNotes", label:"Facility / Lab Access Requirements", type:"text"},
-];
-const FORM_FIELD_CONFIG = {
-  "Employee": EMPLOYEE_FIELDS,
-  "Internal Transfer": EMPLOYEE_FIELDS,
-  "Contractor": [
-    {key:"contractorName", label:"Contractor Full Name", type:"text"},
-    {key:"contractorId", label:"Contractor ID Number", type:"text"},
-    {key:"contractStartDate", label:"Contract Start Date", type:"date"},
-    {key:"contractEndDate", label:"Contract End Date", type:"date"},
-    {key:"supervisorName", label:"Supervisor Name", type:"text"},
-    {key:"contractorEmployer", label:"Contractor's Employer (Company Name)", type:"text"},
-    {key:"safetyTrainingNeeded", label:"Safety Training Required?", type:"select", options:["Yes","No"]},
-    {key:"workArrangement", label:"On-site or Remote?", type:"select", options:["On-site","Remote"]},
-    {key:"officeLocation", label:"Office / Site Location", type:"text"},
-    {key:"computerType", label:"Computer Type Needed", type:"select", options:["Desktop","Standard Laptop","Performance Laptop"]},
-    {key:"laptopBag", label:"Laptop Bag Needed?", type:"select", options:["Yes","No"]},
-  ],
-};
-
-const MAIL_CONTACTS = {
-  "Sample Contact A": "contact-a@example.com",
-  "Sample Contact B": "contact-b@example.com",
-};
-
-function buildMailtoHref(h, mailCfg){
-  const to = MAIL_CONTACTS[h.source] || mailCfg.fallbackTo || "";
-  const subject = mailCfg.subject(h);
-  const body = mailCfg.body(h);
-  return `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-
-function resolveTaskLink(h, t){
-  if(h.remote && t.linkRemote) return t.linkRemote;
-  return t.link;
-}
-
-const MAIL_STOPS = [
-  {code:"OFF-A", label:"Sample Office A", starred:true},
-  {code:"OFF-B", label:"Sample Office B"},
-  {code:"OFF-C", label:"Sample Office C", starred:true},
-  {code:"OFF-D", label:"Sample Office D"},
-  {code:"OFF-E", label:"Sample Office E"},
-];
+const LOCATIONS = ["RV-01","WB-02","LK-03","FH-04"];
 
 const MASTER_TASKS = [
-  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Assign cubicle / workspace", link:"#space-planning", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Assign a buddy", link:"#buddy-guidelines", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Talk to new hire — gather needs", link:"#needs-checklist", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Complete intake form", link:"https://example.com/forms/intake", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Customize onboarding packet", link:"https://example.com/files/onboarding-packet", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false, linkBroken:true},
-  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Submit Move Request", link:"https://example.com/requests/move", types:["Internal Transfer"], ticketed:true},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Review intake form responses", link:"https://example.com/forms/intake/responses", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit IT request / general hardware", link:"https://example.com/requests/hardware", linkRemote:"https://example.com/requests/remote-worker-hardware", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:true},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit software request", link:"#software-request", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:true},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit secure access request", link:"https://example.com/requests/secure-access", types:["Employee","Intern","Contractor"], ticketed:true},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit badge request", link:"https://example.com/requests/badge", types:["Employee","Intern","Contractor"], ticketed:true},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Clean / prep cubicle (Workspace Cleaning Request)", link:"#cleaning-request", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false, optionalWhenRemote:["Employee","Contractor"],
-    mail:{
-      fallbackTo:"facilities@example.com",
-      subject:(h)=>`Workspace Cleaning Request for New Employee`,
-      body:(h)=>`Hello,\nPlease prepare the following workspace for a new employee.\nWork Location: ${h.mailStop}\nRequested Service:\n\u2610 Standard Cleaning: Vacuum the office and wipe down all surfaces.\n\u2610 Deep Cleaning: Perform a thorough cleaning of the office, including all surfaces and hard-to-reach areas.\n\u2610 Deep Cleaning with Item Removal: Remove existing items from the office and perform a thorough cleaning of the workspace.\nRequested Completion Date: ____________\nThank you!`
-    }
-  },
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Add to distribution list", link:"https://example.com/groups/distribution", types:["Employee","Intern","Internal Transfer"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Set up safety/compliance training", link:"#safety-training-setup", types:["Employee","Intern"], ticketed:false,
-    mail:{
-      fallbackTo:"safety-training@example.com",
-      subject:(h)=>`Safety Training Setup - New Hire`,
-      body:(h)=>`Hello,\nPlease set up safety/compliance training for the following new hire:\nName: ${h.name}\nWorkforce ID #: \nSupervisor: ${h.supervisor}\nOffice Location / Address: ${h.location}\nEmail Address: \nSample Lab Access Needed: \nThank you.`
-    }
-  },
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Prepare welcome basket", link:"#welcome-basket", types:["Employee","Intern"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Prepare name plate", link:"https://example.com/templates/name-plate", types:["Employee","Intern","Internal Transfer"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Add new hire to org chart", link:"https://example.com/files/org-chart", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Pre-Onboarding", owner:"Admin", name:"Add new hire to sample lab seating chart", link:"https://example.com/files/lab-seating-chart", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Post-Onboarding", owner:"Supervisor", name:"Review onboarding packet with new hire", link:"https://example.com/files/onboarding-packet", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false, linkBroken:true},
-  {phase:"Post-Onboarding", owner:"Supervisor", name:"Draft org announcement (template)", link:"https://example.com/templates/org-announcement", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false, needsConfirm:true},
-  {phase:"Post-Onboarding", owner:"Supervisor", name:"Send org announcement", link:"#announcement", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false,
-    mail:{
-      fallbackTo:"announcements@example.com",
-      subject:(h)=>`Org Announcement — ${h.name} (${h.type})`,
-      body:(h)=>`Hi,\n\nPlease share an org announcement for our new hire:\n\nName: ${h.name}\nType: ${h.type}\nSupervisor: ${h.supervisor}\nStart Date: ${fmt(h.start)}\n\nThanks,\n${h.admin}`
-    }
-  },
-  {phase:"Post-Onboarding", owner:"Supervisor", name:"Schedule lunch with new hire", link:"#calendar", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Post-Onboarding", owner:"Supervisor", name:"90-day reminder — thank the buddy", link:"#calendar", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Post-Onboarding", owner:"Admin", name:"Add to time & attendance system", link:"#time-attendance-setup", types:["Employee","Intern","Internal Transfer"], ticketed:false,
-    mail:{
-      fallbackTo:"time-attendance@example.com",
-      subject:(h)=>`Time & Attendance System Access Request`,
-      body:(h)=>`Hello,\nPlease add the following new employee to the time & attendance system and grant proxy access to their supervisor.\nEmployee: ${h.name}\nSupervisor: ${h.supervisor}\nThank you.`
-    }
-  },
-  {phase:"Post-Onboarding", owner:"Admin", name:"Add to department channel", link:"#department-channel", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
-  {phase:"Post-Onboarding", owner:"Admin", name:"Send calendar event to new hire", link:"#calendar", types:["Employee","Intern","Internal Transfer","Contractor"], ticketed:false},
+  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Assign cubicle / workspace", link:"#space-planning", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Assign a buddy", link:"#buddy-guidelines", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Talk to new hire — gather needs", link:"#needs-checklist", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Fill out New Hire Form", link:"#newhireform", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Customize onboarding packet", link:"#onboarding-packet", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Supervisor", name:"Submit Move Request", link:"#move-request", rules:{Employee:"no",Intern:"no","Internal Transfer":"yes",Contractor:"no"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Review submitted New Hire Form", link:"#review-form", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit general hardware request", link:"#it-request", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit software request", link:"#software-request", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit VPN request", link:"#vpn-request", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"no",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Submit badge request", link:"#badge-request", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"no",Contractor:"yes"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Clean / prep cubicle", link:"#cleaning-request", rules:{Employee:"optional",Intern:"yes","Internal Transfer":"yes",Contractor:"optional"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Add to distribution list", link:"#distro-list", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"no"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Set up safety/compliance training", link:"#safety-training", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"no",Contractor:"no"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Prepare welcome basket", link:"#welcome-basket", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"no",Contractor:"no"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Prepare name plate", link:"#name-plate", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"no"}},
+  {phase:"Pre-Onboarding", owner:"Admin", name:"Add new hire to Org Chart", link:"#org-chart", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Post-Onboarding", owner:"Supervisor", name:"Review onboarding packet with new hire", link:"#onboarding-packet", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Post-Onboarding", owner:"Supervisor", name:"Send org announcement", link:"#announcement", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Post-Onboarding", owner:"Supervisor", name:"Schedule welcome lunch", link:"#calendar", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Post-Onboarding", owner:"Supervisor", name:"90-day reminder — thank the buddy", link:"#calendar", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Post-Onboarding", owner:"Admin", name:"Add to time & attendance system", link:"#time-attendance", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"no"}},
+  {phase:"Post-Onboarding", owner:"Admin", name:"Add to team channel", link:"#team-channel", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
+  {phase:"Post-Onboarding", owner:"Admin", name:"Send calendar event to new hire", link:"#calendar", rules:{Employee:"yes",Intern:"yes","Internal Transfer":"yes",Contractor:"yes"}},
 ];
 
 function daysFromToday(n){ const d=new Date(); d.setDate(d.getDate()+n); return d; }
 function fmt(d){ return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function ymd(d){ return d.toISOString().slice(0,10); }
+
+function buildTasksFor(type){
+  return MASTER_TASKS.filter(t=>t.rules[type] && t.rules[type]!=="no").map((t,i)=>({
+    ...t, id:type+"-"+i, done:false, ticket:"", memo:"",
+    optional: t.rules[type]==="optional"
+  }));
+}
 
 let HIRES = [
-  {id:1, name:"New Hire A", type:"Employee", supervisor:"Supervisor A", admin:"Admin A", location:"Sample City A", start:daysFromToday(10), source:"Sample Contact A", primaryTicket:"CASE-10001", mailStop:"OFF-A", remote:false, dept:"10101",
-    formResponse:{fullName:"New Hire A", employeeId:"EMP-10001", supervisorName:"Supervisor A", officeLocation:"Sample Office A, Room 1", employmentCategory:"Full-Time", workArrangement:"On-site", laptopBag:"No", computerType:"Performance Laptop", monitorsNeeded:"2", cellPhoneNeeded:"Yes", specialSoftware:"Sample Design Suite", facilityAccessNotes:"None required"}},
-  {id:2, name:"New Hire B", type:"Employee", supervisor:"Supervisor E", admin:"Admin A", location:"Sample City B", start:daysFromToday(19), source:"Sample Contact A", primaryTicket:"CASE-10002", mailStop:"OFF-C", remote:false, dept:"10102",
-    formResponse:{fullName:"New Hire B", employeeId:"EMP-10002", supervisorName:"Supervisor E", officeLocation:"Sample Office C, Room 2", employmentCategory:"Full-Time", workArrangement:"On-site", laptopBag:"No", computerType:"Performance Laptop", monitorsNeeded:"2", cellPhoneNeeded:"Yes", specialSoftware:"Sample Design Suite + Sample File Vault", facilityAccessNotes:"Needs a sample lab access badge"}},
-  {id:3, name:"New Hire C", type:"Internal Transfer", supervisor:"Supervisor B", admin:"Admin A", location:"Sample City C", start:daysFromToday(19), source:"Sample Contact A", primaryTicket:"CASE-10003", mailStop:"OFF-D", remote:false, dept:"10101",
-    formResponse:{fullName:"New Hire C", employeeId:"EMP-10003", supervisorName:"Supervisor B", officeLocation:"Sample Office D, Room 3", employmentCategory:"Full-Time", workArrangement:"On-site", laptopBag:"Yes", computerType:"Standard Laptop", monitorsNeeded:"2", cellPhoneNeeded:"Yes", specialSoftware:"Sample Project Planner", facilityAccessNotes:"Safety orientation required for site access"}},
-  {id:4, name:"New Hire D", type:"Intern", supervisor:"Supervisor C", admin:"Admin A", location:"Sample City D", start:daysFromToday(1), source:"Sample Contact A", primaryTicket:"CASE-10004", mailStop:"OFF-B", remote:false, dept:"10105"},
+  {id:1, name:"Austin Helmuth", empId:"743432", type:"Employee", supervisor:"Mark Jones", location:"RV-01",
+    start:daysFromToday(13), dept:"31020", ie:"Internal", logged:daysFromToday(-3),
+    nhf:{submitted:true, employeeType:"Full-Time", officeOrRemote:"Office", buddyAssigned:"Priya Anand", labAccessRequired:"Yes", otherTraining:"Forklift certification"}},
+  {id:2, name:"Devon Ruiz", empId:"758210", type:"Intern", supervisor:"Nadia Brooks", location:"WB-02",
+    start:daysFromToday(20), dept:"31010", ie:"External", logged:daysFromToday(-1),
+    nhf:{submitted:false}},
+  {id:3, name:"Harper Simms", empId:"761905", type:"Internal Transfer", supervisor:"Mark Jones", location:"RV-01",
+    start:daysFromToday(25), dept:"31020", ie:"Internal", logged:daysFromToday(0),
+    nhf:{submitted:true, employeeType:"Full-Time", officeOrRemote:"Hybrid", buddyAssigned:"Owen Castillo", labAccessRequired:"No", otherTraining:""}},
 ];
+let nextHireId = 4;
+let nextIntakeLogDate = 0;
 
-HIRES.forEach(h=>{
-  h.tasks = MASTER_TASKS.filter(t=>t.types.includes(h.type)).map((t,i)=>({
-    ...t, id:h.id+"-"+i, done:false, ticket:"", memo:""
-  }));
-});
+HIRES.forEach(h=>{ h.tasks = buildTasksFor(h.type); });
+// mark a few tasks done on the first hire so the dashboard shows realistic progress
+HIRES[0].tasks.slice(0,6).forEach(t=>t.done=true);
 
-const SAVED = JSON.parse(localStorage.getItem("onboarding_mock_state")||"null");
-if(SAVED){
-  const oldSoftwareNames = {
-    "Sample legacy design tool":"Sample Design Suite",
-    "Sample legacy design tool + file vault":"Sample Design Suite + Sample File Vault",
-    "Sample legacy project tool":"Sample Project Planner",
-  };
-  HIRES = SAVED.map(h=>({...h, start:new Date(h.start),
-    mailStop:MAIL_STOPS.some(m=>m.code===h.mailStop)?h.mailStop:MAIL_STOPS[0].code,
-    formResponse:h.formResponse?{...h.formResponse, specialSoftware:oldSoftwareNames[h.formResponse.specialSoftware]||h.formResponse.specialSoftware}:h.formResponse
-  }));
-}
-function persist(){ localStorage.setItem("onboarding_mock_state", JSON.stringify(HIRES)); }
-
-function isTaskCountable(h, t){
-  if(t.optionalWhenRemote && t.optionalWhenRemote.includes(h.type) && h.remote) return false;
-  return true;
-}
-function countableTasks(h){ return h.tasks.filter(t=>isTaskCountable(h,t)); }
 function pctComplete(h){
-  const countable = countableTasks(h);
-  if(countable.length===0) return 0;
-  return countable.filter(t=>t.done).length / countable.length;
+  if(!h.tasks.length) return 0;
+  return h.tasks.filter(t=>t.done).length / h.tasks.length;
 }
 function statusLabel(h){
-  const countable = countableTasks(h);
-  const done = countable.filter(t=>t.done).length, total = countable.length;
+  const done = h.tasks.filter(t=>t.done).length, total = h.tasks.length;
   if(done===0) return {text:"Not Started", cls:"notstarted"};
   if(done===total) return {text:"Completed", cls:"completed"};
   return {text:`In Progress (${done}/${total})`, cls:"inprogress"};
@@ -376,19 +325,27 @@ function showView(name){
 document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 
 let currentRole = "ADMIN";
+let showCompleted = true;
 function renderRoleSelect(){
   const sel = document.getElementById("roleSelect");
-  sel.innerHTML = `<option value="ADMIN">Admin (all hires)</option>` +
-    SUPERVISORS.map(s=>`<option value="${s}">Supervisor: ${s}</option>`).join("");
+  sel.innerHTML = `<option value="ADMIN">All hires</option>` +
+    SUPERVISORS.map(s=>`<option value="${s}">${s}</option>`).join("");
   sel.value = currentRole;
   sel.addEventListener("change", ()=>{
     currentRole = sel.value;
-    document.getElementById("viewAsLabel").textContent = "Viewing as: " + (currentRole==="ADMIN" ? "Admin (all hires)" : "Supervisor "+currentRole);
-    renderDashboard(); renderHirePickers();
+    document.getElementById("viewingLabel").textContent = "Viewing as: " + (currentRole==="ADMIN" ? "Admin (all hires)" : "Supervisor — "+currentRole);
+    renderDashboard();
   });
 }
+function toggleShowCompleted(){
+  showCompleted = !showCompleted;
+  document.getElementById("showCompletedToggle").classList.toggle("on", showCompleted);
+  renderDashboard();
+}
 function visibleHires(){
-  return currentRole==="ADMIN" ? HIRES : HIRES.filter(h=>h.supervisor===currentRole);
+  let hires = currentRole==="ADMIN" ? HIRES : HIRES.filter(h=>h.supervisor===currentRole);
+  if(!showCompleted) hires = hires.filter(h=>statusLabel(h).cls!=="completed");
+  return hires;
 }
 function renderDashboard(){
   const hires = visibleHires();
@@ -409,268 +366,191 @@ function renderDashboard(){
     const st = statusLabel(h);
     const pct = Math.round(pctComplete(h)*100);
     return `<tr>
-      <td>${h.name}</td><td>${h.type}</td><td>${h.supervisor}</td><td>${h.admin}</td>
+      <td><a class="namelink" href="javascript:void(0)" onclick="openHireChecklist(${h.id})">${h.name}</a></td>
+      <td>${h.type}</td><td>${h.supervisor}</td><td>${h.location}</td>
       <td>${fmt(h.start)}</td>
       <td><span class="pill ${st.cls}">${st.text}</span></td>
       <td><span class="bar-outer"><span class="bar-inner" style="width:${pct}%"></span></span> ${pct}%</td>
       <td><button class="openbtn" onclick="openHireChecklist(${h.id})">Open</button></td>
     </tr>`;
-  }).join("") || `<tr><td colspan="8" style="text-align:center;color:#999;">No hires assigned to you right now.</td></tr>`;
+  }).join("") || `<tr><td colspan="8" style="text-align:center;color:#999;">No hires to show.</td></tr>`;
 }
 
-let intakeRows = [
-  {date:fmt(daysFromToday(-14)), manager:"Supervisor A", location:"Sample City A", candidate:"New Hire A", ie:"External", type:"Employee", dept:"10101", start:fmt(daysFromToday(10)), admin:"Admin A"},
-  {date:fmt(daysFromToday(-13)), manager:"Supervisor E", location:"Sample City B", candidate:"New Hire B", ie:"External", type:"Employee", dept:"10102", start:fmt(daysFromToday(19)), admin:"Admin A"},
-  {date:fmt(daysFromToday(-13)), manager:"Supervisor B", location:"Sample City C", candidate:"New Hire C", ie:"Internal", type:"Internal Transfer", dept:"10101", start:fmt(daysFromToday(19)), admin:"Admin A"},
-  {date:fmt(daysFromToday(-13)), manager:"Supervisor C", location:"Sample City D", candidate:"New Hire D", ie:"External", type:"Intern", dept:"10105", start:fmt(daysFromToday(1)), admin:"Admin A"},
-];
 function renderIntake(){
   const tbody = document.querySelector("#intakeTable tbody");
-  tbody.innerHTML = intakeRows.map((r,i)=>`<tr>
-    <td>${r.date}</td><td>${r.manager}</td><td>${r.location}</td><td>${r.candidate}</td>
-    <td>${r.ie}</td>
-    <td><select onchange="intakeRows[${i}].type=this.value">${TYPES.map(t=>`<option ${t===r.type?'selected':''}>${t}</option>`).join("")}</select></td>
-    <td><select onchange="intakeRows[${i}].dept=this.value">
-      <option value="" ${!r.dept?'selected':''}>— pick —</option>
-      ${DEPT_OPTIONS.map(d=>`<option value="${d.dept}" ${d.dept===r.dept?'selected':''}>${d.dept} — ${d.department}</option>`).join("")}
-    </select></td>
-    <td>${r.start}</td><td>${r.admin}</td>
-    <td><a href="javascript:void(0)" onclick="showView('checklist')">Open checklist →</a></td>
-  </tr>`).join("");
+  tbody.innerHTML = HIRES.map(h=>`<tr>
+    <td><a class="namelink" href="javascript:void(0)" onclick="openHireChecklist(${h.id})">${h.name}</a></td>
+    <td>${h.empId}</td><td>${h.type}</td><td>${fmt(h.start)}</td><td>${h.supervisor}</td>
+    <td>${h.dept}</td><td>${h.location}</td><td>${h.ie}</td><td>${fmt(h.logged)}</td>
+    <td><a class="namelink" href="javascript:void(0)" onclick="openHireChecklist(${h.id})">Open checklist →</a></td>
+    <td><button class="trashbtn" onclick="deleteHire(${h.id})">🗑</button></td>
+  </tr>`).join("") || `<tr><td colspan="11" style="text-align:center;color:#999;">No hires logged yet.</td></tr>`;
 }
-function addMockIntakeRow(){
-  const n = intakeRows.length+1;
-  intakeRows.push({date:fmt(new Date()), manager:"(new manager)", location:"Sample City", candidate:"New Hire "+n, ie:"External", type:"Employee", dept:"", start:fmt(daysFromToday(14)), admin:"Admin A"});
-  renderIntake();
+function deleteHire(id){
+  HIRES = HIRES.filter(h=>h.id!==id);
+  renderIntake(); renderDashboard();
 }
 
-function renderHirePickers(){
-  const hires = visibleHires();
-  const picker = document.getElementById("hirePicker");
-  picker.innerHTML = hires.map(h=>`<option value="${h.id}">${h.name} (${h.type})</option>`).join("");
-  picker.onchange = ()=>renderChecklist(parseInt(picker.value));
-  const nPicker = document.getElementById("notifyHirePicker");
-  nPicker.innerHTML = hires.map(h=>`<option value="${h.id}">${h.name} (${h.type})</option>`).join("");
-  nPicker.onchange = renderTimeline;
-  if(hires.length){ renderChecklist(hires[0].id); renderTimeline(); }
-  else { document.getElementById("hireMetaBox").innerHTML=""; document.getElementById("taskArea").innerHTML="<p style='color:#999'>No hires to show for this role.</p>"; }
+// ---- Add New Hire modal ----
+function populateModalCombos(){
+  document.getElementById("m_supervisor").innerHTML = `<option value="">Find items</option>` + SUPERVISORS.map(s=>`<option>${s}</option>`).join("");
+  document.getElementById("m_dept").innerHTML = `<option value="">Find items</option>` + DEPTS.map(d=>`<option value="${d.code}">${d.code} ${d.name}</option>`).join("");
+  document.getElementById("m_location").innerHTML = `<option value="">Find items</option>` + LOCATIONS.map(l=>`<option>${l}</option>`).join("");
 }
+function openAddHireModal(){
+  populateModalCombos();
+  document.getElementById("m_name").value = "";
+  document.getElementById("m_type").value = "";
+  document.getElementById("m_empid").value = "";
+  document.getElementById("m_start").value = "";
+  document.getElementById("m_supervisor").value = "";
+  document.getElementById("m_dept").value = "";
+  document.getElementById("m_location").value = "";
+  document.getElementById("m_ie").value = "";
+  document.getElementById("m_logged").value = ymd(new Date());
+  document.getElementById("modalError").style.display = "none";
+  document.getElementById("addHireModal").classList.add("active");
+}
+function closeAddHireModal(){
+  document.getElementById("addHireModal").classList.remove("active");
+}
+function saveNewHire(){
+  const name = document.getElementById("m_name").value.trim();
+  const type = document.getElementById("m_type").value;
+  const empId = document.getElementById("m_empid").value.trim();
+  const start = document.getElementById("m_start").value;
+  const supervisor = document.getElementById("m_supervisor").value;
+  const dept = document.getElementById("m_dept").value;
+  const location = document.getElementById("m_location").value;
+  const ie = document.getElementById("m_ie").value;
+  const logged = document.getElementById("m_logged").value;
+
+  const missing = [];
+  if(!name) missing.push("New Hire");
+  if(!type) missing.push("Hire Type");
+  if(!empId) missing.push("Employee ID");
+  if(!start) missing.push("Start Date");
+  if(!supervisor) missing.push("Supervisor");
+  if(missing.length){
+    const err = document.getElementById("modalError");
+    err.textContent = "Please fill in required fields: " + missing.join(", ") + ".";
+    err.style.display = "block";
+    return;
+  }
+
+  const newHire = {
+    id: nextHireId++, name, empId, type, supervisor,
+    location: location || "TBD", start: new Date(start), dept: dept || "—", ie: ie || "External",
+    logged: logged ? new Date(logged) : new Date(),
+    nhf: {submitted:false}
+  };
+  newHire.tasks = buildTasksFor(type);
+  HIRES.push(newHire);
+  closeAddHireModal();
+  renderIntake(); renderDashboard();
+}
+
 function openHireChecklist(id){
   showView("checklist");
-  document.getElementById("hirePicker").value = id;
   renderChecklist(id);
 }
 function renderChecklist(id){
   const h = HIRES.find(x=>x.id===id);
   if(!h) return;
   const st = statusLabel(h);
-  const deptInfo = DEPT_OPTIONS.find(d=>d.dept===h.dept) || {dept:h.dept, department:"(unlisted)"};
   document.getElementById("hireMetaBox").innerHTML = `
     <div class="hire-meta">
       <div><span class="k">Name</span><span class="v">${h.name}</span></div>
       <div><span class="k">Type</span><span class="v">${h.type}</span></div>
-      <div><span class="k">Supervisor</span><span class="v">${h.supervisor}</span></div>
-      <div><span class="k">Admin</span><span class="v">${h.admin}</span></div>
+      <div><span class="k">Assigned To</span><span class="v">${h.supervisor}</span></div>
       <div><span class="k">Location</span><span class="v">${h.location}</span></div>
       <div><span class="k">Start Date</span><span class="v">${fmt(h.start)}</span></div>
-      <div><span class="k">Primary Ticket #</span><span class="v">${h.primaryTicket}</span></div>
+      <div><span class="k">Dept #</span><span class="v">${h.dept}</span></div>
       <div><span class="k">Status</span><span class="v"><span class="pill ${st.cls}">${st.text}</span></span></div>
-      <div><span class="k">BU / OU</span><span class="v">${ORG_BU} / ${ORG_OU} <span style="color:#999;font-size:10px;">(fixed)</span></span></div>
-      <div><span class="k">Dept. #</span><span class="v">
-        <select onchange="setDept('${h.id}',this.value)">
-          ${DEPT_OPTIONS.map(d=>`<option value="${d.dept}" ${d.dept===h.dept?'selected':''}>${d.dept} — ${d.department}</option>`).join("")}
-        </select>
-      </span></div>
-      <div><span class="k">Remote hire?</span><span class="v">
-        <select onchange="setRemote('${h.id}',this.value)">
-          <option value="no" ${!h.remote?'selected':''}>No — on-site</option>
-          <option value="yes" ${h.remote?'selected':''}>Yes — remote</option>
-        </select>
-      </span></div>
-      <div><span class="k">Mail Stop</span><span class="v">
-        <select onchange="setMailStop('${h.id}',this.value)">
-          ${MAIL_STOPS.map(m=>`<option value="${m.code}" ${m.code===h.mailStop?'selected':''}>${m.code} (${m.label})${m.starred?' *':''}</option>`).join("")}
-        </select>
-      </span></div>
     </div>`;
-  document.getElementById("formResponseBox").innerHTML = renderFormResponse(h);
+
+  const done = h.tasks.filter(t=>t.done).length, total = h.tasks.length;
   const phases = [["Pre-Onboarding","Supervisor"],["Pre-Onboarding","Admin"],["Post-Onboarding","Supervisor"],["Post-Onboarding","Admin"]];
-  let html = "";
+  let html = `<h3>Hire Checklist</h3><div class="progress-sub">${done} of ${total} tasks complete • ${total?Math.round(100*done/total):0}%</div>`;
   phases.forEach(([phase,owner])=>{
     const rows = h.tasks.filter(t=>t.phase===phase && t.owner===owner);
     if(!rows.length) return;
-    html += `<div class="phase-head ${owner==='Admin'?'admin':''}">${phase.toUpperCase()} — ${owner.toUpperCase()}</div>`;
-    html += `<div class="headrow"><div>Done</div><div>Task (click to open link)</div><div>Ticket #</div><div>Memo</div></div>`;
+    html += `<div class="phase-head ${owner==='Admin'?'admin':''}">${phase} — ${owner}</div>`;
+    html += `<div class="headrow"><div></div><div>Task (click to open link)</div><div>Ticket #</div><div>Memo</div></div>`;
     rows.forEach(t=>{
-      const countable = isTaskCountable(h,t);
-      const isMail = !!t.mail;
-      const usedRemoteLink = h.remote && !!t.linkRemote;
-      const href = isMail ? buildMailtoHref(h, t.mail) : resolveTaskLink(h, t);
-      const linkAttrs = isMail ? `href="${href}"` : `href="${href}" target="_blank" rel="noopener noreferrer"`;
-      html += `<div class="task-row ${countable?'':'task-optional'}">
-        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${h.id}','${t.id}',this.checked)">
-        <span><a ${linkAttrs}>${isMail?'✉️ ':''}${t.name}</a>${isMail?' <span class="badge-mail">mail</span>':''}${usedRemoteLink?' <span class="badge-mail" style="background:#fdeedb;color:#a15c00;">remote link</span>':''}${t.linkBroken?' <span class="badge-optional" style="background:#ffd7d7;color:#8a1f1f;">⚠ link needs fixing</span>':''}${t.needsConfirm?' <span class="badge-optional" style="background:#fff3cd;color:#7a5c00;">? confirm placement</span>':''}${countable?'':' <span class="badge-optional">optional — remote hire</span>'}</span>
-        ${t.ticketed ? `<input type="text" placeholder="e.g. INC00123" value="${t.ticket}" onchange="setTicket('${h.id}','${t.id}',this.value)">` : `<span style="color:#bbb;font-size:11px;">n/a</span>`}
-        <input type="text" placeholder="e.g. date, note..." value="${t.memo||''}" onchange="setMemo('${h.id}','${t.id}',this.value)">
+      html += `<div class="task-row ${t.optional?'task-optional':''}">
+        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${h.id},'${t.id}',this.checked)">
+        <span><a href="${t.link}">${t.name}</a>${t.optional?' <span class="badge-optional">optional</span>':''}</span>
+        <input type="text" placeholder="n/a" value="${t.ticket}" onchange="setTicket(${h.id},'${t.id}',this.value)">
+        <input type="text" placeholder="e.g. date, note..." value="${t.memo||''}" onchange="setMemo(${h.id},'${t.id}',this.value)">
       </div>`;
     });
   });
-  document.getElementById("taskArea").innerHTML = html;
-}
-function findTask(hid, tid){ const h=HIRES.find(x=>x.id===parseInt(hid)); const t=h.tasks.find(x=>x.id===tid); return {h,t}; }
-function toggleTask(hid,tid,val){
-  const {h,t}=findTask(hid,tid);
-  t.done=val;
-  persist(); renderChecklist(h.id); renderDashboard();
-}
-function setTicket(hid,tid,val){ const {t}=findTask(hid,tid); t.ticket=val; persist(); }
-function setMemo(hid,tid,val){ const {t}=findTask(hid,tid); t.memo=val; persist(); }
-function setMailStop(hid,val){ const h=HIRES.find(x=>x.id===parseInt(hid)); h.mailStop=val; persist(); renderChecklist(h.id); }
-function setDept(hid,val){ const h=HIRES.find(x=>x.id===parseInt(hid)); h.dept=val; persist(); renderChecklist(h.id); renderDashboard(); }
-function setRemote(hid,val){ const h=HIRES.find(x=>x.id===parseInt(hid)); h.remote=(val==="yes"); persist(); renderChecklist(h.id); renderDashboard(); }
+  document.getElementById("checklistColBox").innerHTML = html;
 
-function renderFormResponse(h){
-  const fields = FORM_FIELD_CONFIG[h.type];
-  if(!fields){
-    return `<div class="form-response-box"><div class="form-response-head">📋 Intake Form Response</div>
-      <div class="note" style="margin-top:0;">Form fields are unavailable for this hire type.</div></div>`;
+  // side panel — New Hire Form (reflects the form tied to this hire)
+  const nhf = h.nhf || {submitted:false};
+  let panel = `<h3>New Hire Form</h3>`;
+  if(!nhf.submitted){
+    panel += `<div class="status">Not submitted yet</div>
+      <div class="nhf-field"><label class="req">Employee Type</label><select><option>Find items</option><option>Full-Time</option><option>Part-Time</option><option>Seasonal</option></select></div>
+      <div class="nhf-field"><label class="req">Office or Remote?</label><select><option>Find items</option><option>Office</option><option>Hybrid</option><option>Remote</option></select></div>
+      <div class="nhf-field"><label class="req">Buddy Assigned?</label><select><option>Find items</option>${SUPERVISORS.map(s=>`<option>${s}</option>`).join("")}</select></div>
+      <div class="nhf-field"><label class="req">Lab Access Required?</label><select><option>Find items</option><option>Yes</option><option>No</option></select></div>
+      <div class="nhf-field"><label>Other Training (optional)</label><input type="text" placeholder="e.g. forklift, safety..."></div>`;
+  } else {
+    panel += `<div class="status submitted">✓ Submitted</div>
+      <div class="nhf-field"><label>Employee Type</label><div class="val">${nhf.employeeType||"—"}</div></div>
+      <div class="nhf-field"><label>Office or Remote?</label><div class="val">${nhf.officeOrRemote||"—"}</div></div>
+      <div class="nhf-field"><label>Buddy Assigned?</label><div class="val">${nhf.buddyAssigned||"—"}</div></div>
+      <div class="nhf-field"><label>Lab Access Required?</label><div class="val">${nhf.labAccessRequired||"—"}</div></div>
+      <div class="nhf-field"><label>Other Training</label><div class="val">${nhf.otherTraining||"None"}</div></div>`;
   }
-  const rows = fields.map(f=>{
-    const val = (h.formResponse && h.formResponse[f.key]) || "";
-    let inputHtml;
-    if(f.type==="select"){
-      inputHtml = `<select onchange="setFormField('${h.id}','${f.key}',this.value)">
-        <option value="" ${!val?'selected':''}>—</option>
-        ${f.options.map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join("")}
-      </select>`;
-    } else {
-      inputHtml = `<input type="${f.type}" value="${val}" onchange="setFormField('${h.id}','${f.key}',this.value)">`;
-    }
-    return `<div class="form-field"><label>${f.label}</label>${inputHtml}</div>`;
-  }).join("");
-  return `<div class="form-response-box">
-    <div class="form-response-head">📋 Intake Form Response — ${h.type}</div>
-    <div class="form-response-sub">Transcribed from the supervisor's submitted form (manual entry in this mockup — see note below on automating this).</div>
-    <div class="form-response-grid">${rows}</div>
-  </div>`;
+  document.getElementById("nhfPanelBox").innerHTML = panel;
 }
-function setFormField(hid, key, val){
-  const h = HIRES.find(x=>x.id===parseInt(hid));
-  if(!h.formResponse) h.formResponse = {};
-  h.formResponse[key] = val;
-  persist();
-}
+function findTask(hid, tid){ const h=HIRES.find(x=>x.id===hid); const t=h.tasks.find(x=>x.id===tid); return {h,t}; }
+function toggleTask(hid,tid,val){ const {h,t}=findTask(hid,tid); t.done=val; renderChecklist(h.id); renderDashboard(); }
+function setTicket(hid,tid,val){ const {t}=findTask(hid,tid); t.ticket=val; }
+function setMemo(hid,tid,val){ const {t}=findTask(hid,tid); t.memo=val; }
 
-function renderCompareTypeSelect(){
-  const sel = document.getElementById("compareTypeSelect");
-  const typesWithConfig = Object.keys(FORM_FIELD_CONFIG);
-  sel.innerHTML = typesWithConfig.map(t=>`<option value="${t}">${t}</option>`).join("");
-  sel.onchange = renderCompareTable;
-  renderCompareTable();
+// ---- Task Matrix ----
+function cycleRule(taskIdx, type){
+  const order = ["yes","optional","no"];
+  const t = MASTER_TASKS[taskIdx];
+  const cur = t.rules[type];
+  const next = order[(order.indexOf(cur)+1) % order.length];
+  t.rules[type] = next;
+  renderMatrix();
 }
-function renderCompareTable(){
-  const type = document.getElementById("compareTypeSelect").value || Object.keys(FORM_FIELD_CONFIG)[0];
-  const fields = FORM_FIELD_CONFIG[type] || [];
-  const hires = HIRES.filter(h=>h.type===type);
-  const area = document.getElementById("compareTableArea");
-  if(!hires.length){
-    area.innerHTML = `<p style="color:#999;">No hires of type "${type}" right now.</p>`;
-    return;
-  }
-  let html = `<table class="compare-table"><thead><tr><th style="text-align:left;">Field</th>${hires.map(h=>`<th>${h.name}</th>`).join("")}</tr></thead><tbody>`;
-  fields.forEach(f=>{
-    html += `<tr><td class="fieldlabel">${f.label}</td>`;
-    hires.forEach(h=>{
-      const val = (h.formResponse && h.formResponse[f.key]) || "";
-      let inputHtml;
-      if(f.type==="select"){
-        inputHtml = `<select onchange="setFormField('${h.id}','${f.key}',this.value); renderCompareTable();">
-          <option value="" ${!val?'selected':''}>—</option>
-          ${f.options.map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join("")}
-        </select>`;
-      } else {
-        inputHtml = `<input type="${f.type}" value="${val}" onchange="setFormField('${h.id}','${f.key}',this.value)">`;
-      }
-      html += `<td>${inputHtml}</td>`;
-    });
-    html += `</tr>`;
-  });
-  html += `</tbody></table>`;
-  area.innerHTML = html;
-}
-
-function renderTimeline(){
-  const id = parseInt(document.getElementById("notifyHirePicker").value);
-  const h = HIRES.find(x=>x.id===id);
-  if(!h) return;
-  const recipient = document.getElementById("notifyRecipient").value;
-  const points = [
-    {label:"Hire Logged", date: new Date(h.start.getTime()-14*86400000), key:"logged"},
-    {label:"5 days before start", date: new Date(h.start.getTime()-5*86400000), key:"before"},
-    {label:"Start Day", date: h.start, key:"startday"},
-    {label:"7 days after start", date: new Date(h.start.getTime()+7*86400000), key:"after"},
-  ];
-  const today = new Date();
-  const box = document.getElementById("timelineBox");
-  box.innerHTML = `<div class="line"></div>` + points.map((p,i)=>{
-    const leftPct = 8 + i*28;
-    const isPast = p.date < today;
-    return `<div class="tl-point ${isPast?'done':''}" style="left:${leftPct}%" onclick="showEmail('${h.id}','${p.key}','${recipient}')"></div>
-            <div class="tl-date" style="left:${leftPct}%">${fmt(p.date)}</div>
-            <div class="tl-label" style="left:${leftPct}%">${p.label}</div>`;
-  }).join("");
-  showEmail(h.id, "logged", recipient);
-}
-document.getElementById("notifyRecipient").addEventListener("change", renderTimeline);
-
-const EMAIL_TEMPLATES = {
-  logged: {
-    supervisor: (h)=>({subj:`New hire assigned to you: ${h.name}`, body:`Hi ${h.supervisor},<br><br>${h.name} (${h.type}) has been logged for onboarding, starting ${fmt(h.start)}.<br>Please begin your pre-onboarding steps: assign a cubicle, assign a buddy, talk to ${h.name.split(' ')[0]} about their needs, complete the intake form, and customize the onboarding packet.<br><br>Open checklist →`}),
-    admin: (h)=>({subj:`New hire logged: ${h.name} — admin prep can begin after supervisor's form`, body:`A new hire (${h.name}, ${h.type}) was just logged. Supervisor ${h.supervisor} has been notified to start their pre-onboarding steps. You'll be notified again once their intake form is submitted.`}),
-  },
-  before: {
-    supervisor: (h)=>({subj:`Reminder: ${h.name} starts in 5 days — finish pre-onboarding tasks`, body:`Hi ${h.supervisor},<br><br>${h.name} starts ${fmt(h.start)} — 5 days from now. Please make sure all pre-onboarding tasks are complete before then.<br><br>Open checklist →`}),
-    admin: (h)=>({subj:`Reminder: ${h.name} starts in 5 days — finish IT/badge/VPN/etc.`, body:`${h.name} starts ${fmt(h.start)}. Please confirm all admin pre-onboarding tasks (IT, software, VPN, badge, distro list, etc.) are complete.`}),
-  },
-  startday: {
-    supervisor: (h)=>({subj:`${h.name} starts today — review the onboarding packet`, body:`Hi ${h.supervisor},<br><br>Today is ${h.name}'s first day. Please review the onboarding packet with them, send the org announcement, and schedule a welcome lunch.<br><br>Open checklist →`}),
-    admin: (h)=>({subj:`${h.name} starts today — complete day-of admin tasks`, body:`Today is ${h.name}'s first day. Please add them to the time & attendance system, the department channel, and send their calendar event.`}),
-  },
-  after: {
-    supervisor: (h)=>({subj:`Follow-up: wrap up ${h.name}'s onboarding checklist`, body:`Hi ${h.supervisor},<br><br>It's been 7 days since ${h.name} started (${fmt(h.start)}). Please make sure every task on your checklist is marked complete. (Reminder: the 90-day buddy recognition task will come due later — no action needed yet.)<br><br>Open checklist →`}),
-    admin: (h)=>({subj:`Follow-up: wrap up ${h.name}'s admin checklist`, body:`It's been 7 days since ${h.name} started. Please confirm every admin task is marked complete and the hire can move to Completed status.`}),
-  }
-};
-function showEmail(hid, key, recipient){
-  const h = HIRES.find(x=>x.id===parseInt(hid));
-  const tmpl = EMAIL_TEMPLATES[key][recipient](h);
-  document.getElementById("emailPreviewBox").innerHTML = `
-    <div class="email-preview">
-      <div class="subj">✉️ ${tmpl.subj}</div>
-      <div class="meta">To: ${recipient==='supervisor'?h.supervisor:h.admin} &nbsp;|&nbsp; Trigger: ${key} &nbsp;|&nbsp; Sent via: workflow automation (proposed)</div>
-      <div>${tmpl.body}</div>
-    </div>`;
-}
-
 function renderMatrix(){
   const tbody = document.querySelector("#matrixTable tbody");
-  tbody.innerHTML = MASTER_TASKS.map(t=>`<tr>
-    <td style="text-align:left;">${t.phase} / ${t.owner}</td>
-    <td style="text-align:left;">${t.name}</td>
+  tbody.innerHTML = MASTER_TASKS.map((t,i)=>`<tr>
+    <td class="phase-task"><span class="task-name">${t.name}</span><span class="phase-tag">${t.phase} · ${t.owner}</span></td>
     ${TYPES.map(ty=>{
-      if(!t.types.includes(ty)) return `<td class="no">—</td>`;
-      if(t.optionalWhenRemote && t.optionalWhenRemote.includes(ty)) return `<td class="optional">OPTIONAL</td>`;
-      return `<td class="yes">YES</td>`;
+      const val = t.rules[ty];
+      const label = val==="yes"?"Required":val==="optional"?"Optional":"N/A";
+      return `<td><select class="rule-select ${val}" onchange="setRule(${i},'${ty}',this.value)">
+        <option value="yes" ${val==='yes'?'selected':''}>Required</option>
+        <option value="optional" ${val==='optional'?'selected':''}>Optional</option>
+        <option value="no" ${val==='no'?'selected':''}>N/A</option>
+      </select></td>`;
     }).join("")}
   </tr>`).join("");
 }
+function setRule(taskIdx, type, val){
+  MASTER_TASKS[taskIdx].rules[type] = val;
+  renderMatrix();
+  // keep already-generated checklists untouched (mirrors real app: rule changes apply going forward)
+}
 
+// ============ INIT ============
 renderRoleSelect();
+document.getElementById("showCompletedToggle").classList.add("on");
 renderDashboard();
 renderIntake();
-renderHirePickers();
 renderMatrix();
-renderCompareTypeSelect();
+openHireChecklist(1);
+showView("dashboard");
 </script>
 </body>
 </html>
