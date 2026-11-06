@@ -238,7 +238,7 @@
 
 <script>
 // ============ MOCK DATA ============
-const SUPERVISORS = ["Mark Jones","Priya Anand","Derek Holt","Nadia Brooks","Owen Castillo","Lena Whitfield"];
+const SUPERVISORS = ["Jordan Vance","Priya Anand","Derek Holt","Nadia Brooks","Owen Castillo","Lena Whitfield"];
 const TYPES = ["Employee","Intern","Internal Transfer","Contractor"];
 const DEPTS = [
   {code:"31010", name:"Product Engineering (PE)"},
@@ -288,13 +288,13 @@ function buildTasksFor(type){
 }
 
 let HIRES = [
-  {id:1, name:"Austin Helmuth", empId:"743432", type:"Employee", supervisor:"Mark Jones", location:"RV-01",
+  {id:1, name:"Casey Nolen", empId:"743432", type:"Employee", supervisor:"Jordan Vance", location:"RV-01",
     start:daysFromToday(13), dept:"31020", ie:"Internal", logged:daysFromToday(-3),
     nhf:{submitted:true, employeeType:"Full-Time", officeOrRemote:"Office", buddyAssigned:"Priya Anand", labAccessRequired:"Yes", otherTraining:"Forklift certification"}},
   {id:2, name:"Devon Ruiz", empId:"758210", type:"Intern", supervisor:"Nadia Brooks", location:"WB-02",
     start:daysFromToday(20), dept:"31010", ie:"External", logged:daysFromToday(-1),
     nhf:{submitted:false}},
-  {id:3, name:"Harper Simms", empId:"761905", type:"Internal Transfer", supervisor:"Mark Jones", location:"RV-01",
+  {id:3, name:"Harper Simms", empId:"761905", type:"Internal Transfer", supervisor:"Jordan Vance", location:"RV-01",
     start:daysFromToday(25), dept:"31020", ie:"Internal", logged:daysFromToday(0),
     nhf:{submitted:true, employeeType:"Full-Time", officeOrRemote:"Hybrid", buddyAssigned:"Owen Castillo", labAccessRequired:"No", otherTraining:""}},
 ];
