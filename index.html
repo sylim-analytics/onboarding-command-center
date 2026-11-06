@@ -101,6 +101,11 @@
   .nhf-field label.req:after{content:" *";color:#b23b3b;}
   .nhf-field .val{font-size:13px;color:#222;background:var(--grey);border:1px solid var(--border);border-radius:5px;padding:7px 9px;min-height:16px;}
   .nhf-field select, .nhf-field input{width:100%;}
+  .nhf-actions{display:flex;align-items:center;gap:8px;margin-top:14px;padding:12px 0 4px;border-top:1px solid var(--border);position:sticky;bottom:0;background:#fff;}
+  .nhf-actions button{flex:1;}
+  .btn-edit{background:var(--navy);color:#fff;border:none;padding:9px 22px;border-radius:5px;font-size:13.5px;font-weight:700;cursor:pointer;}
+  .nhf-actions button:disabled{opacity:.45;cursor:default;}
+  .nhf-error{display:none;color:#b23b3b;font-size:12px;margin-top:6px;}
 
   /* Task matrix */
   .matrix-note{background:#fff8e1;border:1px solid #e0c36a;border-radius:6px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;}
@@ -488,25 +493,51 @@ function renderChecklist(id){
   });
   document.getElementById("checklistColBox").innerHTML = html;
 
-  // side panel — New Hire Form (reflects the form tied to this hire)
-  const nhf = h.nhf || {submitted:false};
+  // side panel: New Hire Form (editable until submitted; Edit reopens it)
+  const nhf = h.nhf || (h.nhf = {submitted:false});
+  const editing = !nhf.submitted || nhf.editing;
   let panel = `<h3>New Hire Form</h3>`;
-  if(!nhf.submitted){
-    panel += `<div class="status">Not submitted yet</div>
-      <div class="nhf-field"><label class="req">Employee Type</label><select><option>Find items</option><option>Full-Time</option><option>Part-Time</option><option>Seasonal</option></select></div>
-      <div class="nhf-field"><label class="req">Office or Remote?</label><select><option>Find items</option><option>Office</option><option>Hybrid</option><option>Remote</option></select></div>
-      <div class="nhf-field"><label class="req">Buddy Assigned?</label><select><option>Find items</option>${SUPERVISORS.map(s=>`<option>${s}</option>`).join("")}</select></div>
-      <div class="nhf-field"><label class="req">Lab Access Required?</label><select><option>Find items</option><option>Yes</option><option>No</option></select></div>
-      <div class="nhf-field"><label>Other Training (optional)</label><input type="text" placeholder="e.g. forklift, safety..."></div>`;
+  const footer = `<div class="nhf-actions"><button class="btn-edit" ${editing?"disabled":""} onclick="editNhf(${h.id})">Edit</button><button class="btn-save" ${editing?"":"disabled"} onclick="submitNhf(${h.id})">Submit</button></div>`;
+  if(editing){
+    const sel = (id, label, opts, cur) => `<div class="nhf-field"><label class="req">${label}</label><select id="${id}"><option value="">Select...</option>${opts.map(o=>`<option ${o===cur?'selected':''}>${o}</option>`).join("")}</select></div>`;
+    panel += `<div class="status">${nhf.submitted ? "Editing submitted form" : "Not submitted yet"}</div>`
+      + sel("nhf_type","Employee Type",["Full-Time","Part-Time","Seasonal"],nhf.employeeType)
+      + sel("nhf_office","Office or Remote?",["Office","Hybrid","Remote"],nhf.officeOrRemote)
+      + `<div class="nhf-field"><label class="req">Buddy Assigned?</label><input type="text" id="nhf_buddy" placeholder="Type a name" value="${(nhf.buddyAssigned||"").replace(/"/g,"&quot;")}"></div>`
+      + sel("nhf_lab","Lab Access Required?",["Yes","No"],nhf.labAccessRequired)
+      + `<div class="nhf-field"><label>Other Training (optional)</label><input type="text" id="nhf_training" placeholder="e.g. forklift, safety..." value="${(nhf.otherTraining||"").replace(/"/g,"&quot;")}"></div>`
+      + `<div class="nhf-error" id="nhfError"></div>`
+      + footer;
   } else {
     panel += `<div class="status submitted">✓ Submitted</div>
       <div class="nhf-field"><label>Employee Type</label><div class="val">${nhf.employeeType||"—"}</div></div>
       <div class="nhf-field"><label>Office or Remote?</label><div class="val">${nhf.officeOrRemote||"—"}</div></div>
       <div class="nhf-field"><label>Buddy Assigned?</label><div class="val">${nhf.buddyAssigned||"—"}</div></div>
       <div class="nhf-field"><label>Lab Access Required?</label><div class="val">${nhf.labAccessRequired||"—"}</div></div>
-      <div class="nhf-field"><label>Other Training</label><div class="val">${nhf.otherTraining||"None"}</div></div>`;
+      <div class="nhf-field"><label>Other Training</label><div class="val">${nhf.otherTraining||"None"}</div></div>
+      ${footer}`;
   }
   document.getElementById("nhfPanelBox").innerHTML = panel;
+}
+function editNhf(id){ const h=HIRES.find(x=>x.id===id); h.nhf.editing=true; renderChecklist(id); }
+function submitNhf(id){
+  const h = HIRES.find(x=>x.id===id);
+  const v = k => document.getElementById(k).value.trim();
+  const data = {employeeType:v("nhf_type"), officeOrRemote:v("nhf_office"), buddyAssigned:v("nhf_buddy"), labAccessRequired:v("nhf_lab"), otherTraining:v("nhf_training")};
+  const missing = [];
+  if(!data.employeeType) missing.push("Employee Type");
+  if(!data.officeOrRemote) missing.push("Office or Remote?");
+  if(!data.buddyAssigned) missing.push("Buddy Assigned?");
+  if(!data.labAccessRequired) missing.push("Lab Access Required?");
+  if(missing.length){
+    const err = document.getElementById("nhfError");
+    err.textContent = "Please fill in: " + missing.join(", ") + ".";
+    err.style.display = "block";
+    return;
+  }
+  h.nhf = Object.assign({submitted:true, editing:false}, data);
+  renderChecklist(id);
+  renderDashboard();
 }
 function findTask(hid, tid){ const h=HIRES.find(x=>x.id===hid); const t=h.tasks.find(x=>x.id===tid); return {h,t}; }
 function toggleTask(hid,tid,val){ const {h,t}=findTask(hid,tid); t.done=val; renderChecklist(h.id); renderDashboard(); }
