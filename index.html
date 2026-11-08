@@ -196,7 +196,7 @@
   <section class="view" id="view-notifications">
     <h2 class="sectitle">Notification Timeline</h2>
     <div class="matrix-note">
-      <b>Simulated.</b> This mockup sends nothing. In the app, Power Automate sends these messages to the supervisor.
+      <b>Simulated.</b> This mockup sends nothing. In the app, Power Automate pings the admin when an HR or contractor email arrives, then sends the supervisor three notices: the checklist is ready, plus early and final reminders before the start and a follow-up after it.
       A reminder goes out <b>only if the supervisor still has open tasks</b>, so complete tasks on the Hire Checklist and watch the status change.
     </div>
     <div class="toolbar">
@@ -624,6 +624,11 @@ function openSupTasks(h, phase){
 function notifEvents(h){
   const today=startOfDay(new Date()), start=startOfDay(h.start);
   const out=[];
+  // 0. the onboarding email arrives and the admin is pinged (alert only; nothing is read from the email)
+  const fromContractor = h.type === "Contractor";
+  out.push({name: fromContractor ? "Contractor on-boarding email arrives: admin pinged" : "HR new-hire email arrives: admin pinged",
+    sub: "Alert only. Nothing is read from the email; the admin enters the hire.",
+    when: "When the email arrives", to: "Admin", date: startOfDay(h.logged), status: "sent"});
   // 1. supervisor notified when the hire is logged
   out.push({name:"Checklist ready: supervisor notified", sub:"Sent when the hire is saved in the Intake Log", when:"On entry",
     to:h.supervisor, date:startOfDay(h.logged), status:"sent"});
