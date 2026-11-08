@@ -108,6 +108,15 @@
   .nhf-error{display:none;color:#b23b3b;font-size:12px;margin-top:6px;}
 
   /* Task matrix */
+  .ev-type{font-weight:700;color:var(--navy);}
+  .ev-sub{display:block;font-size:11.5px;color:#667;font-weight:400;margin-top:2px;}
+  .pill.sent{background:var(--green);color:var(--greentxt);}
+  .pill.scheduled{background:var(--lblue);color:var(--navy);}
+  .pill.skipped{background:var(--grey);color:#667;}
+  .act-list{list-style:none;margin:0;padding:0;background:#fff;border:1px solid var(--border);border-radius:6px;}
+  .act-list li{padding:9px 14px;border-bottom:1px solid #eee;font-size:13px;}
+  .act-list li:last-child{border-bottom:none;}
+  .act-list .t{color:#667;font-size:11.5px;margin-right:8px;}
   .matrix-note{background:#fff8e1;border:1px solid #e0c36a;border-radius:6px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;}
   .matrix-table th, .matrix-table td{text-align:center;}
   .matrix-table td.phase-task{text-align:left;}
@@ -137,6 +146,7 @@
   <button class="navbtn active" data-view="dashboard">Dashboard</button>
   <button class="navbtn" data-view="intake">Intake Log</button>
   <button class="navbtn" data-view="checklist">Hire Checklist</button>
+  <button class="navbtn" data-view="notifications">Notification Timeline</button>
   <button class="navbtn" data-view="matrix">Task Matrix</button>
 </nav>
 <main>
@@ -180,6 +190,25 @@
       <div class="checklist-col" id="checklistColBox"></div>
       <div class="checklist-col nhf-panel" id="nhfPanelBox"></div>
     </div>
+  </section>
+
+  <!-- NOTIFICATION TIMELINE -->
+  <section class="view" id="view-notifications">
+    <h2 class="sectitle">Notification Timeline</h2>
+    <div class="matrix-note">
+      <b>Simulated.</b> This mockup sends nothing. In the app, Power Automate sends these messages to the supervisor.
+      A reminder goes out <b>only if the supervisor still has open tasks</b>, so complete tasks on the Hire Checklist and watch the status change.
+    </div>
+    <div class="toolbar">
+      <label>Hire:</label>
+      <select class="combo" id="notifHireSelect" onchange="renderNotifications()"></select>
+    </div>
+    <table id="notifTable">
+      <thead><tr><th>Message</th><th>When</th><th>To</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <h2 class="sectitle" style="margin-top:22px;">Activity this session</h2>
+    <ul class="act-list" id="activityList"><li>Add a hire or submit a New Hire Form to see activity here.</li></ul>
   </section>
 
   <!-- TASK MATRIX -->
@@ -326,6 +355,7 @@ function showView(name){
   document.querySelectorAll(".navbtn").forEach(b=>b.classList.remove("active"));
   document.getElementById("view-"+name).classList.add("active");
   document.querySelector(`.navbtn[data-view="${name}"]`).classList.add("active");
+  if(name==="notifications") renderNotifications();
 }
 document.querySelectorAll(".navbtn").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
 
@@ -574,12 +604,82 @@ function setRule(taskIdx, type, val){
   // keep already-generated checklists untouched (mirrors real app: rule changes apply going forward)
 }
 
+// ============ NOTIFICATION TIMELINE (simulated) ============
+const ACTIVITY = [];
+function nEsc(x){ return String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function addBizDays(d,n){
+  const x=startOfDay(d), step=n<0?-1:1; let left=Math.abs(n);
+  while(left>0){ x.setDate(x.getDate()+step); const w=x.getDay(); if(w!==0&&w!==6) left--; }
+  return x;
+}
+function logActivity(text){
+  ACTIVITY.unshift({t:new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}), text});
+  const ul=document.getElementById("activityList");
+  ul.innerHTML = ACTIVITY.map(a=>`<li><span class="t">${nEsc(a.t)}</span>${nEsc(a.text)}</li>`).join("");
+}
+function openSupTasks(h, phase){
+  return h.tasks.filter(t=>t.owner==="Supervisor" && t.phase===phase && !t.optional && !t.done).length;
+}
+function notifEvents(h){
+  const today=startOfDay(new Date()), start=startOfDay(h.start);
+  const out=[];
+  // 1. supervisor notified when the hire is logged
+  out.push({name:"Checklist ready: supervisor notified", sub:"Sent when the hire is saved in the Intake Log", when:"On entry",
+    to:h.supervisor, date:startOfDay(h.logged), status:"sent"});
+  // reminders: only if supervisor tasks are still open
+  const defs=[
+    {name:"Early reminder", sub:"Pre-onboarding supervisor tasks", when:"5 business days before start", date:addBizDays(start,-5), phase:"Pre-Onboarding"},
+    {name:"Final reminder", sub:"Pre-onboarding supervisor tasks", when:"2 business days before start", date:addBizDays(start,-2), phase:"Pre-Onboarding"},
+    {name:"Follow-up", sub:"Post-onboarding supervisor tasks", when:"5 business days after start", date:addBizDays(start,5), phase:"Post-Onboarding"},
+  ];
+  defs.forEach(e=>{
+    const open=openSupTasks(h,e.phase);
+    let status, note="";
+    if(e.date>today){ status="scheduled"; }
+    else if(open>0){ status="sent"; note=` (${open} open task${open===1?"":"s"})`; }
+    else { status="skipped"; }
+    out.push({name:e.name, sub:e.sub+note, when:e.when, to:h.supervisor, date:e.date, status});
+  });
+  return out;
+}
+function renderNotifications(){
+  const sel=document.getElementById("notifHireSelect"); if(!sel) return;
+  const prev=sel.value;
+  sel.innerHTML = HIRES.map(h=>`<option value="${h.id}">${nEsc(h.name)} (${nEsc(h.type)})</option>`).join("");
+  if(prev && HIRES.some(h=>String(h.id)===prev)) sel.value=prev;
+  const h=HIRES.find(x=>String(x.id)===sel.value) || HIRES[0];
+  const tb=document.querySelector("#notifTable tbody");
+  if(!h){ tb.innerHTML='<tr><td colspan="5">No hires yet. Add one on the Intake Log tab.</td></tr>'; return; }
+  const label={sent:"Sent",scheduled:"Scheduled",skipped:"Not needed, tasks complete"};
+  tb.innerHTML = notifEvents(h).map(e=>`<tr>
+    <td><span class="ev-type">${nEsc(e.name)}</span><span class="ev-sub">${nEsc(e.sub)}</span></td>
+    <td>${nEsc(e.when)}</td><td>${nEsc(e.to)}</td><td>${fmt(e.date)}</td>
+    <td><span class="pill ${e.status}">${label[e.status]}</span></td></tr>`).join("");
+}
+// log activity when a visitor adds a hire or submits the New Hire Form
+(function(){
+  const origSave=saveNewHire;
+  saveNewHire=function(){
+    const before=HIRES.length; origSave();
+    if(HIRES.length>before){ const h=HIRES[HIRES.length-1];
+      logActivity(`Checklist and New Hire Form created for ${h.name} (${h.type}). ${h.supervisor} notified.`); }
+  };
+  const origSubmit=submitNhf;
+  submitNhf=function(id){
+    const h=HIRES.find(x=>x.id===id), was=h&&h.nhf&&h.nhf.submitted&&!h.nhf.editing;
+    origSubmit(id);
+    if(h&&h.nhf&&h.nhf.submitted&&!h.nhf.editing&&!was) logActivity(`New Hire Form submitted for ${h.name}. Admin notified.`);
+  };
+})();
+
 // ============ INIT ============
 renderRoleSelect();
 document.getElementById("showCompletedToggle").classList.add("on");
 renderDashboard();
 renderIntake();
 renderMatrix();
+renderNotifications();
 openHireChecklist(1);
 showView("dashboard");
 </script>
